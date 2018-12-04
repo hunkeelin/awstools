@@ -17,6 +17,7 @@ var (
     server = flag.Bool("server",false,"whether to host an api server")
     addr = flag.String("bindaddr","","the bind address for server option")
     port = flag.String("bindport","2018","the bind port for the server option")
+    rebootvm = flag.Bool("reboot",false,"whether to reboot the box")
 )
 func main() {
     flag.Parse()
@@ -45,9 +46,11 @@ func main() {
         }
         fmt.Println("The Private ip address for natting :", ip)
         fmt.Println("rebooting instance: ",id)
-        err = rebootIn(ec2Svc,*dryrun,id)
-        if err != nil {
-            panic(err)
+        if *rebootvm {
+            err = rebootIn(ec2Svc,*dryrun,id)
+            if err != nil {
+                panic(err)
+            }
         }
     }
 }
